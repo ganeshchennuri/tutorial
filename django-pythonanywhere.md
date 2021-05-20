@@ -1,7 +1,7 @@
 # Steps to host django apps on Pythonanywhere
 
 - Signup on [PythonAnywhere](https://www.pythonanywhere.com/) and setup username.
-- Go to Consoles and select bash, clone your repo, cloning repo into users_proj directory
+- Go to Console and select bash, clone your repo, cloning repo into users_proj directory
 
     > git clone https://github.com/ganeshchennuri/users-auth.git ./users_proj
 
@@ -42,11 +42,11 @@
 - Go to Web and click on reload you app
     - go to files section and open manage.py in project directory, add to allowed hosts and save.
         ALLOWED_HOSTS = ['g4n3sh.pythonanywhere.com', ]
-- Now tha application is hosted successfully, but static file path need to be set in order to use static files.
+- Now the application is hosted successfully, but static file path need to be set in order to use static files.
     | URL            | Directory    |
     | :------------- | :---------- |
     |  C/static/ | /home/G4n3Sh/users_proj/static   |
     | /static/admin   | /home/G4n3Sh/.virtualenvs/mysite-virtualenv/lib/python3.8/site-packages/django/contrib/admin/static/admin |
 
-- we need to setup admin static file directory, since without it the default admin page is not user friendly 		 
+- we need to setup admin static file directory, without that admin page won't be able to access static files and UI gets weird not user friendly.		 
     		 
