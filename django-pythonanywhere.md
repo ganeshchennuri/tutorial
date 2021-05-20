@@ -42,7 +42,6 @@
 - Go to Web and click on reload you app
     - go to files section and open manage.py in project directory, add to allowed hosts and save.
         ALLOWED_HOSTS = ['g4n3sh.pythonanywhere.com', ]
-    - 
 - Now tha application is hosted successfully, but static file path need to be set in order to use static files.
     | URL            | Directory    |
     | :------------- | :----------: |
