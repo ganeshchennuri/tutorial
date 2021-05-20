@@ -44,7 +44,7 @@
         ALLOWED_HOSTS = ['g4n3sh.pythonanywhere.com', ]
 - Now tha application is hosted successfully, but static file path need to be set in order to use static files.
     | URL            | Directory    |
-    | :------------- | :----------: |
+    | :------------- | :---------- |
     |  C/static/ | /home/G4n3Sh/users_proj/static   |
     | /static/admin   | /home/G4n3Sh/.virtualenvs/mysite-virtualenv/lib/python3.8/site-packages/django/contrib/admin/static/admin |
 
