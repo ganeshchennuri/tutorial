@@ -19,7 +19,7 @@
     - set virtualenv directory
         /home/G4n3Sh/.virtualenvs/mysite-virtualenv
     - Open Wsgi Configuration file delete all the code and add below snippet, change project path & settings location in environment variable
-        ```
+        ```python
         import os
         import sys
 
