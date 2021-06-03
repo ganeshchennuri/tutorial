@@ -7,7 +7,8 @@
 
 - Create and activate Virtual environment
     > mkvirtualenv --python=/usr/bin/python3.8 mysite-virtualenv
-
+- Activate virtual environment
+    > workon mysite-virtualenv
 - Install Project requirements
     > cd users_proj
 
@@ -36,16 +37,20 @@
         ```
 - come back to console and make migrations
     > chmod +x manage.py
-
+    
+    > ./manage.py makemigrations
+    
     > ./manage.py migrate
-
+- Check for Errors
+    > ./manage.py check
 - Go to Web and click on reload you app
     - go to files section and open manage.py in project directory, add to allowed hosts and save.
+        
         ALLOWED_HOSTS = ['g4n3sh.pythonanywhere.com', ]
 - Now the application is hosted successfully, but static file path need to be set in order to use static files.
     | URL            | Directory    |
     | :------------- | :---------- |
-    |  C/static/ | /home/G4n3Sh/users_proj/static   |
+    |  /static/ | /home/G4n3Sh/users_proj/static   |
     | /static/admin   | /home/G4n3Sh/.virtualenvs/mysite-virtualenv/lib/python3.8/site-packages/django/contrib/admin/static/admin |
 
 - we need to setup admin static file directory, without that admin page won't be able to access static files and UI gets weird not user friendly.		 
