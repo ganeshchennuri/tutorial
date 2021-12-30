@@ -90,7 +90,7 @@ Fundamental part of data processing system
 
 ---
 # Data Storage in GCP
-![Storage Options in GCP](Snapshots/storage_gcp.png)
+![Storage Options in GCP](Snapshots/storage_gcp.PNG)
 
 ### Cloud Storage
 - Unstructered object storage (buckets)
@@ -653,7 +653,7 @@ while True:
 - msgs may not be ordered, use timestamps when required
 - msgs stored in nearest region, storage policy allows to control this & additional egress fees may apply
 
-![Monitoring](snapshots/pubsub_monitoring.png)
+![Monitoring](Snapshots/pubsub_monitoring.PNG)
  
 - use service accounts for authorizations, can grant per topic or per subscription permissions
 - grant limited access to publish or consume messages
@@ -794,7 +794,7 @@ ORDER BY amount DESC;
 - Bounded (Batch from one source), Unbound(Stream)
 - transform represent the data transformation, takes 1 or 2 pcollections as input & gives zero or 1 pcollection as output
 - Pipeline contains multiple Transform steps
-![PCollection and Trasform](snapshots/pcollection_transform.PNG)
+![PCollection and Trasform](Snapshots/pcollection_transform.PNG)
 
 ## Pipeline Lifecycle
 1. Design
@@ -1109,11 +1109,11 @@ WHERE flagged=true
 ## Dataproc Architecure
 - Dataproc will create Master(YARN Resource mgr or HDFS Name node) & Worker nodes(YARN data manager & HDFC data nodes)
 - dataproc coms with recent stable version of Hadoop, Spark, zoo keeper, HIve, PIG, TEZ, Jupiter notebboke & GCS connectors etc
-![Dataproc Architecture](snapshots/dataproc_architecture.png)
+![Dataproc Architecture](Snapshots/dataproc_architecture.PNG)
 
 - cluster actions complete in ~90 seconds & billed per second (minim 1min), can be scaled up or down or turn it off according to needs
 - Once cluster is setup
-![Dataproc Usage](snapshots/dataproc_usage.png)
+![Dataproc Usage](Snapshots/dataproc_usage.PNG)
 
 ## DataProc Basics
 - can be regional or global(any avail zone)
@@ -1247,7 +1247,7 @@ $ cat part-00000 | sort -rk 2
 - app profiles (default or custom)
 - can contain 1 or more cluster, each cluster contains multiple nodes
 
-![BigTable Architecture](snapshots/bigtable_architecture.png)
+![BigTable Architecture](Snapshots/bigtable_architecture.PNG)
 
 ### instances
 - Production -> 1+ Cluster, 3+ Nodesper Cluster
@@ -1506,7 +1506,7 @@ table.mutate_rows(rows)
 
 ### Denormalisation
 - nested & repeated columns. eg addresses column can have nested columns city, state, zip & person can have multiple addresses
-![Denormalisation](snapshots/denormalization.png)
+![Denormalisation](Snapshots/denormalization.PNG)
 
 ### data formats
 - CSV (default), JSON(newline delimited), Avro(compressed), Parquet, ORC(Optimized wor columnar Hive), Datastore exports, firestore exports
@@ -1532,14 +1532,14 @@ table.mutate_rows(rows)
 ## Table Partitoning & Ckustering
 - data is partitioned based on columns, each partition has same no.of columns & structure as original table
 - partitioning improves query performance & control costs
-![types of partitioning](snapshots/partitioning.PNG)
+![types of partitioning](Snapshots/partitioning.PNG)
 
 - Clustering over a partitioned tables, is like indexing a table
 - clustering is supported for both partitiioned tables (Partitioned key & clustering key)
 - ordering of cluster tables column should be maintained while accessing too 
-![clustered tables in big query](snapshots/limitations_clustering.PNG)
+![clustered tables in big query](Snapshots/limitations_clustering.PNG)
 
-![Clustering Limitations](snapshots/query_limitations.PNG)
+![Clustering Limitations](Snapshots/query_limitations.PNG)
 
 - avoid clustered cloumns in complex filter expressions & avoid comparing cluster columns to other
 
@@ -1603,7 +1603,7 @@ Permissions -> bigquery.jobs.create, bigquery.datasets.create
 - BigQuery auditlogs automatically sent to stackdriver
 - stackdriver bigq logs can viewed, visualized & alerts can be used(email,slack,text) 
 
-![Cloud audit logs](snapshots/bigq_auditlogs.png)
+![Cloud audit logs](Snapshots/bigq_auditlogs.PNG)
 
 ## BigQueryML
 - can user WebUI, bq command line tool, BigQuery rest APi or Jupyter notebooks(datalab) external BI tools
@@ -1720,7 +1720,7 @@ ORDER BY duration DESC;
 - data sources can br from csv, all other gcp databases & google products & third party products
 - reports can be shared like gdrive files
 
-![Graphs](snapshots/datastudio_charts.png)
+![Graphs](Snapshots/datastudio_charts.PNG)
 
 ---
 
@@ -1866,7 +1866,7 @@ gcloud composer environments delete $COMPOSER_ENV_NAME --location $GCP_REGION
 
 ## ML Model
 - data fed to model & we obtain answers
-![ML Pipeline](snapshots/ml_pipeline.PNG)
+![ML Pipeline](Snapshots/ml_pipeline.PNG)
 - Label - particular interest(eg.house price) denoted by y
 - Feature - attributes associated with labes(eg.size, no.of rooms) denoted by x
 - Example - Features with labels
@@ -1889,10 +1889,10 @@ gcloud composer environments delete $COMPOSER_ENV_NAME --location $GCP_REGION
 - CLassification (predict class from specified set) eg.based on features house may be classified to increased price set or any other set
 - Clustering (group elements into clusters) eg. employees with good behaviour & bad behaviour
 - Transfer Learning
-![Transfer Learning](snapshots/transfer_learning.png)
+![Transfer Learning](Snapshots/transfer_learning.PNG)
 
 ## Overfitting
-![Curve fitting](snapshots/curve_fitting.png)
+![Curve fitting](Snapshots/curve_fitting.PNG)
 - with unseen data underfit model not does well with large gap, balanced data with small gap & overfit(does not generalize & won't be able to predict correctly)
 
 ### Regularization
@@ -1955,7 +1955,7 @@ tensorflow keras is tensorflow imple of keras, make easy to use tendor propertie
 - Partially COnnected Layer
 
 ### Activation Function
-eg ![Softmax](snapshots/softmax_af.PNG)
+eg ![Softmax](Snapshots/softmax_af.PNG)
 
 ## Neural Network Architecture
 ### Feed Forward Neural Network
@@ -1977,7 +1977,7 @@ eg ![Softmax](snapshots/softmax_af.PNG)
 ### GANs (Generative Adversarial Networks)
 - GANs are deep NN composite of two opposing nn -> general & discriminator network
 - allows for the creation of things like images, music, speech, deepfakes
-![GANs](snapshots/gans.png)
+![GANs](Snapshots/gans.PNG)
 
 ## Building Neural Network
 ```python
@@ -2004,7 +2004,7 @@ tf.keras.activations.tanh
 - tf.keras.losses.CategoricalCrossentropy
 
 ### Callback methods
-![callbacks](snapshots/keras_callbacks.png)
+![callbacks](Snapshots/keras_callbacks.PNG)
 
 ---
 
@@ -2022,7 +2022,7 @@ tf.keras.activations.tanh
     - Cloud TPUs
     - Q-FLow ML (kubernetes)
 - AI Building Blocks
-![AI](snapshots/ai_buildingblocks.PNG)
+![AI](Snapshots/ai_buildingblocks.PNG)
 
 ### Vision API 
 - Sync Mode (direct outputs)
@@ -2155,10 +2155,10 @@ $ gcloud functions deploy check_images --runtime python39 --trigger-resource tra
 - Data support (info on mission data), provides correalation, cardinality & distribution)
 - Automatic feature engineering (basic text processing, time & data features)
 - Model Training (Parallel testing of multiple model types)
-![AutoML Table Process](snapshots/automl_tables.PNG)
+![AutoML Table Process](Snapshots/automl_tables.PNG)
 
 ## AutoML tables vs BigQuery ML
-![AutoMl vs BigQueryML](snapshots/automl_bigqueryml.PNG)
+![AutoMl vs BigQueryML](Snapshots/automl_bigqueryml.PNG)
 
 ---
 # Operationalizing Ml Models
