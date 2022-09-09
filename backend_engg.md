@@ -335,3 +335,103 @@ client will start reducing the congestion window where it can communicate effici
 - traversing the range values is easy & cost efficient, since pointers are used to reference the value
 - [visualization](https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html)
 
+# XMPP (Extensibles, messaging & Presence protocol) (Jabber)
+- Standard messaging protocol, backend is xmpp most clients can talk to you
+- just like email, xmpp is decentralized, we can connect with different xmpp servers
+## Architecture
+- users would have global addressing (jabberid, jid) user@domain
+- global streams <stream:stream/>
+- Features(Encryption)
+- XML Stanzas
+    - <messages/>, <presence/>, <iq/>
+    - Attributes (from, to , etc)
+- example
+    ![Image](./backend_engg_snapshots/xmpp.png "XMPP Example")
+
+## Transport
+- by default on top of tcp port 5222
+- can be blocked by firewalls
+- an http implementation is done to avoid firewalls with long polling
+
+## Creation of app
+- deploy a docker container for xmpp using (ejabberd) and create users on server using cmd on container
+    ```bash
+    $docker run --name ejabberd -p 5222:5222 ejabberd/ecs
+    $docker exec -it ejabberd bin/ejabberdctl register admin localhost password
+    $docker exec -it ejabberd bin/ejabberdctl register test2 localhost password
+    ```
+- create xmpp clients using simple-xmpp node js client library
+    ```js
+    const xmpp = require("simple-xmpp");
+
+    xmpp.on ("online", data => {
+        console.log("Hey you are online! ")
+        console.log(`Connected as ${data.jid.user}`)
+        send();
+    })
+
+    function send () {
+        setTimeout(send, 5000);
+        xmpp.send("test2@localhost", `hi! ${Date.now()}`)
+    }
+    xmpp.on("error", error => 
+        console.log(`something went wrong!${error} `))
+
+    xmpp.on("chat", (from, message)=>{
+        console.log(`Got a message! ${message} from ${from}`)
+    })
+
+    xmpp.connect({
+        "jid": "admin@localhost",
+        "password": "password",
+        "host": "localhost",
+        "port": 5222
+    })
+    ```
+- ejabbered is by default encrypted (TLS 1.3)
+
+# Detailed overview accessing google.com from browser
+- [reference](https://github.com/alex/what-happens-when)
+
+## Agenda
+- initial typing, url parsing, http or https, dns lookup, tcp con, tls alpn sni, first get, html parse
+
+## Initial typing
+-  checks search history and tries to autocomplete, search through local search index, some send the text to default search engine
+
+## URL Parsing
+- when enter is clicked after typing, url checks whether it is a search text or page url which should be visited.
+
+## Protocol
+- hsts (http strict transport security), client checks whether url is present in hstp list, if yes it requests https connection(port 443)
+- if no then it would request http request(port 80)
+
+## DNS
+- we got domain name, protocol, port, we need IP address
+- checks local dns cache,if no checks OS host file, if no then it checks DoH Enabled
+- if browser supports DoH, a call is made to dns via https to get ip
+- DNS is a udp service listening on port 53, its unencrypted (genrally via http), can be DNS over TLS or DNS over HTTPS
+- finally you do DNS Lookup53
+
+## connection
+- when sending the external request we don't know the mac of destination, packet is sent to gateway(router), change the mac to router
+- NAT is done since the client sends private ip of the local subnet, ip changed to public ip of router & NAT table is updated with the translation & once the response comes back it will translate back response is sent to client
+- we receive the IP address of google.com
+
+## TCP Connection
+- so again when we don't have the ip address in local subnet, ARP (Adress resolution protocol request tls) is sent to find mac address of router & the request is sent to router(gateway)
+- router again does NAT & updates nat tables
+- 3 way tcp handshake is done & client is connected with server
+
+## TLS
+- after tcp, tls(1.3)
+- for TLS, client creates public & private key, sends public & merged key to server (client hello), all the algorithns which it supports, negotiates alp, sni
+- server merges its private key with the client sent merged key forms secret key
+- server hello is sent (public key& server private key merged), also sends certificate for the website(from server name indication), cipher which needs to be used
+- client now has public key, his private key & servers private key then forms secret key
+
+## HTML Parsing
+- browsers parse the content & render on the screen 
+- if its HTTP/2 the 
+- HTTP/2 PUSH (server sends the responses before even the request is made for them)
+- HTTP 1.1, can have 6 connections & request them.
