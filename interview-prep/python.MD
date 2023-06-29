@@ -23,7 +23,7 @@
     myorder = "I have a {carname}, it is a {model}."
     print(myorder.format(carname = "Ford", model = "Mustang"))
     ```
-- Classes, Oops concepts by [Febin George](https://www.udemy.com/course/python-oops-beginners/)
+- classes, oops concepts by [Febin George](https://www.udemy.com/course/python-oops-beginners/)
     ```python
     # class, instance attributes, static & class methods
     # ClassName.attribute => fetching or updating the class attribute
@@ -42,7 +42,7 @@
     # Multilevel Inheritance(methods/attributes are called based on the sequence of inheritance classes if not found in base class
 
     # Access specifiers & mangling
-    # protected: _membername => just a convention, doesn;t affect the behavior
+    # protected: _membername => just a convention, doesn't affect the behavior
     # private: __membername
     class Car:
         number_of_wheels = 4
@@ -188,7 +188,7 @@
 
     # tuple can be used as key for hashmap or hashset
     myset = set()
-    set.add((1,2))
+    myset.add((1,2))
     # myset.add([1,3]) => TypeError: unhashable type: 'list'
 
     # adding as key to dictionary/hashmap
@@ -232,5 +232,116 @@
 # Advanced Python
 - Expert Python Techwith Tim [Playlist](https://www.youtube.com/playlist?list=PLzMcBGfZo4-kwmIcMDdXSuy_wSqtU-xDP)
     ```python
-    # Advanced
+    # Python code is compiled to bytecode & then python interpreter runs the bytecode
+    # if the code is properly indented & with correct syntax, we can write however we may like it
+    # using inspect module we can see all the details related to particular function or clas
+    import inspect
+
+    def hello(name):
+        def greet():
+            print(f"Hello Mr/Ms {name}")
+        return greet
+    
+    greet = hello("John")
+    greet()
+    print(inspect.getmembers(greet))
+    
+    # we can also see source code of python modules
+    from queue import Queue
+    print(inspect.getsource(Queue))
+
+    # Dunder/magic methods
+    # we can overide & customize the magic methods, __repr__ representation of obj, __add__ for + operatoe, etc
+    ```
+- Class defines rules for objects, metclass defines rules for class
+    ```python
+    # Everything in python is object
+    # class is an object of class 'type'
+    type(5) #<class 'int'>
+
+    def func():
+        pass
+
+    class Test:
+        pass
+    
+    type(func) #<class 'function'>
+    type(Test()) #<class '__main__.Test'>
+    type(Test) #<class 'type'>
+
+    # we can create class without the class syntax
+    Test = type('Test', (), {"x":3}) # equivalent to above definition
+    t = Test()
+    t.x = 5
+
+    # Inheritance
+    class Foo:
+        def show(self):
+            print("hello world")
+    Test = type('Test',(Foo,),{'x':3})
+
+    # adding functions
+    def add_attribute(self):
+        self.z = 10
+    
+    Test = type('Test',(Foo,),{'add_attribute':add_attribute})
+
+    # So the class creation is inheriting class type, so if we want to change this
+    # Metaclass is the class which allows us to create class unlike the inheritng properties of base class
+    class Meta(type):
+        def __new__(self, class_name, bases, attributes):
+            print(attributes)
+            return type(class_name, bases, attributes)
+
+    # if we inherit, it would be simple class, we need to specify as metaclass
+    class Dog(metaclass=Meta):
+        x = 5
+        y = 9
+        def hello(self):
+            print("hello world")
+    # {'__module__': '__main__', '__qualname__': 'Dog', 'x': 5, 'y': 9, 'hello': <function Dog.hello at 0x000002171829B100>}
+
+    # we can also modify the attributes from metclass, before passing to type
+    ```
+- Decorators
+    ```python
+    def func(f):
+        def wrapper():
+            print("started")
+            f()
+            print("ended")
+        return wrapper
+
+    def func2():
+        print("finished func2")
+
+    f = func(func2) #passing the func2 as param to func
+    f() #calling the returned wrapper
+
+    # two lines can be made as single line if
+    @func
+    def func3():
+        print("finished func3")
+
+    func3() #it automatically calls the function
+
+    # if the functions using decorators have params & unknown number of parameters
+    # we can handle by passing *args, **kwargs as params to wrapper function
+    # if we want to return the value function returning, we can capture the rv & return
+    def func(f):
+        def wrapper(*args, **kwargs):
+            print(*args, **kwargs)
+            rv = f()
+            return rv
+    
+    # extending functionality using decorators
+    def timer(func):
+        def wrapper(*args, **kwargs):
+            st = time.time()
+            rv = func(*args, **kwargs)
+            et = time.time()
+            print("Time: ",et-st)
+            return rv
+            
+    # Decorator will show the time function took to execute
     ```
