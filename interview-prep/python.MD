@@ -342,6 +342,195 @@
             et = time.time()
             print("Time: ",et-st)
             return rv
-            
+
     # Decorator will show the time function took to execute
+
+    # we can also create a logger decorator, it would open & append logging statements to the file
+    ```
+- Generators
+    ```python
+    # Generators are a way to generate sequences or values in a memory efficient way,using yield
+    # yield keyword pauses execution until next item is requested & keeps track of previous execution
+    def gen(n):
+        for i in range(n):
+            yield i**2
+    # find squares of number from 0 to n
+    g = gen(1000)
+    next(g) #gives the first yielded value
+
+    # manual creation of generator would look like
+    class Gen:
+        def __init__(self, n):
+            self.n = n
+            self.last = 0
+
+        def __next__(self):
+            return self.next()
+
+        def next(self):
+            if self.last == self.n:
+                raise StopIteration
+            rv = self.last**2
+            self.last += 1
+            return rv
+
+    g = Gen(1000)
+    print(next(g))
+    # generator can also be created using ()
+    g = (i**2 for i in range(1000))
+    ```
+- Context managers
+    ```python
+    # Context managers allow you to ensure a certain operation occurs on exit or crash from a certain block of code
+
+    f = open("file.txt", "r")
+    try:
+        f.write("hello world")
+    finally:
+        f.close() #so whatsoever happens while operating on file, it should be closed at end
+
+    # we can do this using the context managers using with keyword
+    with open("file.txt", "r") as f:
+        f.write("hello world")
+
+    # We can write our context manager
+    class File:
+        def __init__(self, filename, method):
+            self.file = open(filename, method)
+
+        def __enter__(self):
+            # returns a value to be used in the context manager
+            print("Enter File")
+            return self.file
+
+        def __exit__(self, type, value, traceback):
+            # ending operation, even if some execption occurs
+            print("Exit File", type, value, traceback)
+            #<class 'Exception'> Test <traceback object at 0x00000254821E7440>
+            self.file.close()
+            # return True
+            # if we return True, program won't be crashed, but we need to handle the exceptions
+
+    with File('file.txt','w') as f:
+        print("Middle")
+        f.write('hello world')
+        #raise Exception("Test") #even if we raise this, exit method will still be executed
+
+    # context manager can also be created by generator, with decoratot
+    from contextlib import contextmanager
+    @contextmanager
+    def file(filename, method):
+        print("Enter")
+        f = open(filename, method)
+        yield f
+        f.close()
+        print("Exit")
+
+    with file('file.txt','w') as f:
+        f.write("Hello world!")
+    ```
+- Advance py by [NeuralNine](https://www.youtube.com/playlist?list=PL7yh-TELLS1FuqLSjl5bgiQIEH25VEmIc)
+    ```python
+    # Argument Parsing
+    # similar to c language, we can pass arguments while executing python file
+    # python main.py hello
+    import sys
+
+    filename = sys.argv[0] # main.py
+    message = sys.argv[1] # hello
+
+    # we can use len(sys.argv) to fild length or also we can get list of args
+
+    # Capturing optional Parameter like -p for port number, -h for host 
+    import getopt
+    import sys
+
+    hostip = "0.0.0.0"
+    port = 0
+
+    opts, args = getopt.getopt(sys.argv[1:], "h:p:", ["host", "port"])
+
+    print(opts, args)
+    for opt, arg in opts:
+        if opt == "-h":
+            hostip = arg
+        elif opt == "-p":
+            port = arg
+
+    print(f"Hacking ~->{hostip}:{port}")
+
+    ## Encapsulation
+    class P:
+        def __init__(self, name, age):
+            self.__name = name
+            self.__age = age
+
+        @property
+        def name(self):
+            return self.__name
+
+        @name.setter
+        def name(self, value):
+            self.__name = value
+
+
+    p = P("Alice", 0)
+    print(p.name)
+    p.name = "Bob"
+    print(p.name)
+    ```
+- Design patterns
+    - Factory Design Pattern [Code](design_patterns/factory.py)
+        ```python
+        # We would have a factory class/method which would help us creating objects of main class
+        # we woud have control over when to create, rather than directly creating an object
+        ```
+    - Proxy design pattern [Code](design_patterns/proxy.py)
+        ```python
+        # In proxy patterns, we would have a proxy Class/model, similar to Main CLass, we will customize the methods of main class using proxy class
+        # Everything will be hidden behind a proxy Class & acts like a proxy for Main CLass
+        ```
+    - Singleton design pattern - The closs would only allow instantiation once & uses the object or throws an exception if re-instantiated. Would be helpful in locks, or making the things accessible once at a time.
+    - Composite design pattern [Code](design_patterns/composite.py)
+        ```python
+        # In this example we have Interface/Abstract class for a Department
+        # We can have multiple departments in a company and employees in a dept
+        # Also we can have ParentDepartment & its employees
+        # we can implement interfaces for all these departments & also combine the dept into ParentDepartment.
+        
+        ```
+## Coroutines
+- Python functions are also known as a procedure, subprocess, or subroutused for cooperative multitasking of a process that is voluntarily giving away (yield) control over a period of time (periodically).helpers or nested functions in the main function are called subroutines in Python.
+- subroutines have only single entry point i.e main function
+- Co-routines used for cooperative multitasking of a process that is voluntarily giving away (yield) control over a period of time (periodically).
+- Unlike threads, the programmer or programming language decides switching of coroutines.
+- CPython uses stack based VM, runtime uses stackpointer for execution. Python Uses Heap for longterm storage
+    ```python
+    import dis
+
+    def square(x):
+        return x*x
+ 
+    def main():
+        x = square(4)
+        print(x)
+        
+    dis(square)
+    dis(main)
+    
+    #1           0 RESUME                   0
+
+    #2           2 LOAD_FAST                0 (x)
+    #            4 LOAD_FAST                0 (x)
+    #            6 BINARY_OP                5 (*)
+    
+    #1           0 RESUME                   0
+
+    #2            2 LOAD_GLOBAL              1 (NULL + square)
+    #3           32 LOAD_GLOBAL              3 (NULL + print)
+    #            44 LOAD_FAST                0 (x)
+    #            46 PRECALL                  1
+    #            60 POP_TOP
+    #            62 LOAD_CONST               0 (None)
+    #            64 RETURN_VALUE
     ```
