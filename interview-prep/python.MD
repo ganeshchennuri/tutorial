@@ -289,7 +289,7 @@
     # So the class creation is inheriting class type, so if we want to change this
     # Metaclass is the class which allows us to create class unlike the inheritng properties of base class
     class Meta(type):
-        def __new__(self, class_name, bases, attributes):
+        def __new__(cls, class_name, bases, attributes):
             print(attributes)
             return type(class_name, bases, attributes)
 
@@ -514,7 +514,7 @@
     def main():
         x = square(4)
         print(x)
-        
+
     dis(square)
     dis(main)
     
@@ -533,4 +533,63 @@
     #            60 POP_TOP
     #            62 LOAD_CONST               0 (None)
     #            64 RETURN_VALUE
+
+
+    # coroutines major useful methods are, __next__ for initial execution
+    # send for sending new input
+    # close for closing th coroutines
+    # throw for throwing an Exception
+    def print_name(prfx):
+        print(f"Coroutine object searching for the prefix: {prfx}")
+        # Using excption handling for cpaturing couroutine close
+        try:
+            while True:
+                given_name = yield
+                if prfx in given_name:  # If required prefix match
+                    print(given_name)  # Print given name
+        except GeneratorExit:  # Handling GeneratorExit exception
+            print("Now we have closed the coroutine!!")
+
+
+    # Taking preifx = Avenger, creating coroutine object does not execute
+    coroutine_object = print_name("Avenger")
+    # print(dir(coroutine_object))
+
+    coroutine_object.__next__()  # using _next_() method executes until yield
+    coroutine_object.send("Batman")  # sending input data, continues execution after yield
+    coroutine_object.send("Avenger Tony")  # 2nd iteration of while loop, with new value
+    coroutine_object.send("Avenger Steve Rogers")
+    coroutine_object.close()  # closing the coroutine
     ```
+- asyncio helps in creating coroutines, with normal syntax
+    ```python
+    # asyncio creates eventloop, executes coroutine, closes an eventloop
+    async def main():
+        return 45
+    asyncio.run(main)
+
+    # like sleep yield generator, stops & waits for exec
+    await asyncio.sleep(delay: float)
+
+    # we can await on many things other than coroutines
+    res = await asyncio.gather(*futures)
+    # we also have async iterables, context managers which use coroutines
+    # also supports async generators
+
+    # For example using aiohttp
+    async def main():
+        coros = [fetch(url) for url in urls]
+        results = await asyncio.gather(*coros)
+
+    ```
+- CPython- uses shared small integers to help quick access. Integers range from [-5, 256] already exists in memory. [source](https://wsvincent.com/python-wat-integer-cache/)
+    ```python
+    x = 10
+    y = 10
+    print(id(x),id(y))
+
+    # Python-> reads & parses the source code, generates abstract syntax tree, produce bytecode, and runs the bytecode
+
+    # Cpython uses stack oriented vm to execute bytecode
+    ```
+- cprofile can be used to see the function calls & optimize the code [tutorial](https://www.machinelearningplus.com/python/cprofile-how-to-profile-your-python-code/)
